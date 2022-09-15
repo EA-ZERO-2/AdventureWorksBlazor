@@ -1,0 +1,50 @@
+﻿@using AdventureWorksNS.Data
+<h3>CustomerDetail</h3>
+<EditForm Model="@Customer" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>ID</label>
+        <div>
+            <InputNumber @bind-Value="@Customer.CustomerId" />
+            <ValidationMessage For="@(() => Customer.CustomerId)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Compañía</label>
+        <div>
+            <InputText @bind-Value="@Customer.CompanyName" />
+            <ValidationMessage For="@(() => Customer.CompanyName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Nombre</label>
+        <div>
+            <InputText @bind-Value="@Customer.FirstName" />
+            <ValidationMessage For="@(() => Customer.FirstName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Apellido</label>
+        <div>
+            <InputText @bind-Value="@Customer.LastName" />
+            <ValidationMessage For="@(() => Customer.LastName)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-@ButtonStyle">@ButtonText</button>
+
+
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public Customer Customer { get; set; } = null!;
+    [Parameter]
+    public string ButtonText { get; set; } = "Guardar Cambios";
+    [Parameter]
+    public string ButtonStyle { get; set; } = "info";
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+}

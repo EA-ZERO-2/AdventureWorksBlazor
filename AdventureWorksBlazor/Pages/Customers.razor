@@ -1,0 +1,81 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using AdventureWorksNS.Data
+@using AdventureWorksBlazor.Data
+
+@page "/customers/{companyname?}"
+@inject ICustomersService service
+
+
+<h3>Customers@(string.IsNullOrWhiteSpace(CompanyName) ? " Todos " : " en " + CompanyName)</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="createcustomer">
+        <i class="oi oi-plus"></i> Crear Customer
+    </a>
+</div>
+
+
+
+@if (customers == null)
+{
+    <p><em>Cargando data...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Compañia</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Customer c in customers)
+
+            {
+                
+                <tr>
+                    
+                    <td>@c.CustomerId</td>
+                    <td>@c.CompanyName</td>
+                    <td>@c.FirstName</td>
+                    <td>@c.LastName</td>
+                    <td>
+                        <a class="btn btn-info" href="editcustomer/@c.CustomerId">
+                            <i class="oi oi-pencil"></i>
+                        </a>
+                        <a class="btn btn-danger" href="deletecustomer/@c.CustomerId">
+                            <i class="oi oi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                
+            }
+        </tbody>
+    </table>
+}
+@code {
+    [Parameter]
+    public string? CompanyName { get; set; }
+    private IEnumerable<Customer>? customers;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrWhiteSpace(CompanyName))
+        {
+            customers = await service.GetCustomersAsync();
+            //db.Customers.ToListAsync();
+        }
+        else
+        {
+            customers = await service.GetCustomersAsync(CompanyName);
+            //db.Customers.Where(c => c.CompanyName == CompanyName).ToListAsync();
+        }
+
+    }
+}
+

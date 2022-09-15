@@ -1,0 +1,27 @@
+﻿@using AdventureWorksNS.Data
+@using AdventureWorksBlazor.Data
+@inject NavigationManager navigation
+@inject ICustomersService service
+@page "/createcustomer"
+
+
+<h3>Crear Customer</h3>
+
+<CustomerDetail ButtonText="Create Customer"
+                Customer="@customer"
+                OnValidSubmit="@Create" />
+
+
+@code {
+
+    private Customer customer = new();
+
+    private async Task Create()
+    {
+        await service.CreateCustomerAsync(customer);
+        navigation.NavigateTo("customers");
+    }
+
+
+
+}

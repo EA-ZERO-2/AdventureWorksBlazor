@@ -1,0 +1,37 @@
+﻿@using AdventureWorksBlazor.Data
+@page "/deletecustomer/{customerid}"
+@inject ICustomersService service
+@inject NavigationManager navigation
+@using AdventureWorksNS.Data
+
+<h3>Borrar Customer</h3>
+<div class="alert alert-danger">
+    ¡Precaución! ¡Esta acción no se puede revertir!
+</div>
+
+<CustomerDetail ButtonText="Borrar Customer"
+                ButtonStyle="danger"
+                Customer="@customer"
+                OnValidSubmit="@Delete" />
+
+
+@code {
+    [Parameter]
+    public string CustomerId { get; set; } = null!;
+    private Customer? customer = new();
+    protected async override Task OnParametersSetAsync()
+    {
+        customer = await service.GetCustomerAsync(Int32.Parse(CustomerId));
+    }
+
+    private async Task Delete()
+    {
+        if (customer is not null)
+        {
+            await service.DeleteCustomerAsync(Int32.Parse(CustomerId));
+        }
+        navigation.NavigateTo("customers");
+    }
+
+}
+
